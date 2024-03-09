@@ -1,4 +1,5 @@
-import { cn } from "@/lib/utils";
+"use client";
+import { cn, money } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,12 +10,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
+import { Item } from "@/types/item";
+import { useAppDispatch } from "@/lib/hooks";
+import { CartState, addToCart } from "@/lib/features/cart.slice";
 
 type ProductCardProps = React.ComponentProps<typeof Card> & {
-  title: string;
+  item: Item;
 };
 
-export function ProductCard({ className, title, ...props }: ProductCardProps) {
+export function ProductCard({ className, item, ...props }: ProductCardProps) {
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    const data: CartState = {
+      item: item,
+      qty: 2,
+    };
+    dispatch(addToCart(data));
+  };
+
   return (
     <Card className={cn(className)} {...props}>
       <CardHeader>
@@ -23,13 +37,13 @@ export function ProductCard({ className, title, ...props }: ProductCardProps) {
             src="/vegetables.webp"
             alt="product-thumbnail"
             className="image mb-2"
-            layout="fill"
+            fill
             quality={100}
             loading="lazy"
           />
         </div>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>Rp. 1.500</CardDescription>
+        <CardTitle>{item.name}</CardTitle>
+        <CardDescription>{money(item.price)}</CardDescription>
       </CardHeader>
       <CardContent>
         <CardDescription>
@@ -38,7 +52,9 @@ export function ProductCard({ className, title, ...props }: ProductCardProps) {
         </CardDescription>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Add to Cart</Button>
+        <Button className="w-full" onClick={handleAddToCart}>
+          Add to Cart
+        </Button>
       </CardFooter>
     </Card>
   );
