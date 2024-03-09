@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Item } from "@/types/item";
 import { useAppDispatch } from "@/lib/hooks";
 import { CartState, addToCart } from "@/lib/features/cart.slice";
+import { useToast } from "@/components/ui/use-toast";
 
 type ProductCardProps = React.ComponentProps<typeof Card> & {
   item: Item;
@@ -20,6 +21,7 @@ type ProductCardProps = React.ComponentProps<typeof Card> & {
 
 export function ProductCard({ className, item, ...props }: ProductCardProps) {
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   const handleAddToCart = () => {
     const data: CartState = {
@@ -27,6 +29,10 @@ export function ProductCard({ className, item, ...props }: ProductCardProps) {
       qty: 2,
     };
     dispatch(addToCart(data));
+    toast({
+      title: "Added to Cart",
+      description: `${data.item.name} is added to cart.`,
+    });
   };
 
   return (

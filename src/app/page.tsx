@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex flex-col md:flex-row justify-between">
         <h1 className="font-bold text-2xl underline">Groceries Showcase</h1>
         <div>
           <Link href="/cart">
@@ -18,7 +18,7 @@ export default function Home() {
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         {items.map((item) => (
           <ProductCard key={item.id} item={item} />
         ))}

@@ -14,10 +14,12 @@ import { cn, money } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useMemo } from "react";
 import { removeCart } from "@/lib/features/cart.slice";
+import { useToast } from "./ui/use-toast";
 
 export function CartTable({ className }: { className?: string }) {
   const cartItems = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
+  const { toast } = useToast();
 
   const totalPrice = useMemo(
     () =>
@@ -29,6 +31,12 @@ export function CartTable({ className }: { className?: string }) {
 
   const handleRemoveCart = (index: number) => {
     dispatch(removeCart(index));
+    toast({
+      title: "Item Removed",
+      description: "1 item is removed from cart.",
+      variant: "destructive",
+      duration: 1500
+    });
   };
 
   return (
