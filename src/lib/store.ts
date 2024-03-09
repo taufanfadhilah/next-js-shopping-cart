@@ -1,6 +1,15 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import cartSlice from "@/lib/features/cart.slice";
-import { persistReducer, persistStore } from "redux-persist";
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  persistStore,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { useDispatch } from "react-redux";
 
@@ -19,6 +28,12 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof reducer>;

@@ -11,11 +11,14 @@ import {
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { cn, money } from "@/lib/utils";
-import { useAppSelector } from "@/lib/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useMemo } from "react";
+import { removeCart } from "@/lib/features/cart.slice";
 
 export function CartTable({ className }: { className?: string }) {
   const cartItems = useAppSelector((state) => state.cart);
+  const dispatch = useAppDispatch();
+
   const totalPrice = useMemo(
     () =>
       money(
@@ -23,6 +26,10 @@ export function CartTable({ className }: { className?: string }) {
       ),
     [cartItems]
   );
+
+  const handleRemoveCart = (index: number) => {
+    dispatch(removeCart(index));
+  };
 
   return (
     <Table className={cn(className)}>
@@ -43,7 +50,11 @@ export function CartTable({ className }: { className?: string }) {
             <TableCell>{money(cart.item.price)}</TableCell>
             <TableCell>{money(cart.item.price * cart.qty)}</TableCell>
             <TableCell>
-              <Button variant={"destructive"} size={"sm"}>
+              <Button
+                variant={"destructive"}
+                size={"sm"}
+                onClick={() => handleRemoveCart(index)}
+              >
                 Remove
               </Button>
             </TableCell>
